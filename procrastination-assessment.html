@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procrastination Profiler | CogSkills</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #2d3748;
+            background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 4px solid #8B5CF6;
+        }
+        
+        .logo {
+            font-size: 2em;
+            font-weight: 900;
+            color: #8B5CF6;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 0.9em;
+            color: #718096;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #2d3748;
+            font-size: 2.5em;
+            margin: 20px 0 15px 0;
+            font-weight: 800;
+        }
+        
+        .subtitle {
+            color: #4a5568;
+            font-size: 1.2em;
+            font-weight: 400;
+        }
+        
+        .intro {
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            border-left: 6px solid #8B5CF6;
+        }
+        
+        .intro p {
+            margin-bottom: 12px;
+            font-size: 1.05em;
+        }
+        
+        .intro strong {
+            color: #8B5CF6;
+        }
+        
+        .partnership-note {
+            background: #fff7ed;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #FF8C00;
+            text-align: center;
+        }
+        
+        .partnership-note p {
+            color: #4a5568;
+            margin-bottom: 8px;
+        }
+        
+        .partnership-note strong {
+            color: #FF8C00;
+            font-size: 1.1em;
+        }
+        
+        .section {
+            margin-bottom: 35px;
+            padding: 30px;
+            border-radius: 12px;
+            background: #f8fafc;
+            border-left: 6px solid #8B5CF6;
+        }
+        
+        .section h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+        
+        .section-intro {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+            font-style: italic;
+        }
+        
+        .question-group {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .scenario {
+            background: #fef3c7;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid #f59e0b;
+            font-style: italic;
+            color: #92400e;
+        }
+        
+        .question {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2d3748;
+            font-size: 1.1em;
+        }
+        
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            border-radius: 8px;
+            background: #f7fafc;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .radio-item:hover {
+            background: #faf5ff;
+            border-color: #8B5CF6;
+            transform: translateX(5px);
+        }
+        
+        .radio-item.selected {
+            background: #faf5ff;
+            border-color: #8B5CF6;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+        }
+        
+        .radio-item input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .radio-item span {
+            flex: 1;
+            font-size: 1.05em;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            border-radius: 8px;
+            background: #f7fafc;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .checkbox-item:hover {
+            background: #faf5ff;
+            border-color: #8B5CF6;
+        }
+        
+        .checkbox-item.selected {
+            background: #faf5ff;
+            border-color: #8B5CF6;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1em;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #8B5CF6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 700;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(-1px);
+        }
+        
+        #results {
+            display: none;
+            margin-top: 40px;
+            padding: 40px 40px 100px 40px;
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+            border-radius: 16px;
+            border: 4px solid #8B5CF6;
+        }
+        
+        .profile-badge {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            border: 3px solid #8B5CF6;
+        }
+        
+        .profile-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+        
+        .profile-name {
+            font-size: 2em;
+            font-weight: 900;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .profile-tagline {
+            font-size: 1.1em;
+            color: #4a5568;
+            font-style: italic;
+        }
+        
+        .interpretation {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .interpretation h3 {
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            color: #2d3748;
+        }
+        
+        .interpretation h4 {
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+            color: #8B5CF6;
+        }
+        
+        .interpretation p, .interpretation ul {
+            font-size: 1.05em;
+            line-height: 1.8;
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+        
+        .interpretation ul {
+            padding-left: 20px;
+        }
+        
+        .interpretation li {
+            margin-bottom: 8px;
+        }
+        
+        .cta-box {
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            border: 4px solid #8B5CF6;
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2);
+        }
+        
+        .cta-box h4 {
+            color: #2d3748;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .cta-box p {
+            color: #4a5568;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+        
+        .cta-box ul {
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+        
+        .cta-box li {
+            margin-bottom: 10px;
+            font-size: 1.05em;
+            color: #2d3748;
+        }
+        
+        .cta-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 1.05em;
+            font-family: inherit;
+        }
+        
+        .cta-input:focus {
+            outline: none;
+            border-color: #8B5CF6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 700;
+            font-size: 1.1em;
+            transition: all 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        .tier-section {
+            border-top: 3px solid #e2e8f0;
+            margin-top: 30px;
+            padding-top: 30px;
+        }
+        
+        .tier-section h5 {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            color: #2d3748;
+        }
+        
+        .tier-box {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .tier-box:hover {
+            border-color: #8B5CF6;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.1);
+        }
+        
+        .tier-box.writer-special {
+            border: 3px solid #FF8C00;
+            background: #fff7ed;
+        }
+        
+        .tier-box strong {
+            display: block;
+            font-size: 1.3em;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        
+        .tier-box p {
+            margin: 8px 0;
+            font-size: 0.95em;
+            color: #4a5568;
+        }
+        
+        .price {
+            font-size: 1.5em;
+            font-weight: 900;
+            color: #2d3748;
+            margin-top: 12px;
+        }
+        
+        .price-note {
+            font-size: 0.7em;
+            color: #718096;
+            font-weight: 400;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .profile-icon {
+                font-size: 3em;
+            }
+            
+            .profile-name {
+                font-size: 1.5em;
+            }
+            
+            .btn {
+                padding: 15px 30px;
+                font-size: 1.1em;
+            }
+            
+            #results {
+                padding: 30px 20px 150px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">COGSKILLS</div>
+            <div class="tagline">Experience, Not Theory</div>
+            <h1>Procrastination Profiler</h1>
+            <p class="subtitle">Understand what's really behind your delay patterns</p>
+        </div>
+        
+        <div class="partnership-note">
+            <p>🤝 <strong>In Partnership with A Worship of Writers</strong></p>
+            <p>For writers working through blocks, perfectionism, and "not good enough" patterns</p>
+        </div>
+        
+        <div class="intro">
+            <p><strong>This isn't about blame.</strong> Procrastination isn't laziness — it's often fear, exhaustion, perfectionism, or feeling disconnected from what matters.</p>
+            <p><strong>You'll discover:</strong> Your procrastination pattern, what's really happening beneath the delay, and practices that address the root cause — not just the symptoms.</p>
+            <p><strong>What happens next:</strong> You'll receive a personalised strategy (not a guilt trip) with resources matched to how you learn and one safe experiment to try.</p>
+        </div>
+        
+        <form id="procrastinationAssessment">
+            <!-- Fear-Based Questions -->
+            <div class="section">
+                <h2>🛡️ Fear & Avoidance</h2>
+                <p class="section-intro">How fear might be showing up in your delays</p>
+                
+                <div class="question-group">
+                    <div class="scenario">You sit down to work on something you care about — maybe writing, a project, or a creative task.</div>
+                    <div class="question">What happens when you face a blank page or empty canvas?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="blank_page" value="1" required>
+                            <span>I freeze — the blankness feels overwhelming</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="blank_page" value="2">
+                            <span>I start, but doubt myself and stop</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="blank_page" value="3">
+                            <span>I can begin, even if it's messy</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="blank_page" value="4">
+                            <span>I embrace the blank space — it's full of possibility</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="scenario">You need to share your work — hit publish, send an email, submit a proposal.</div>
+                    <div class="question">What stops you from sharing your work?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="sharing_block" value="1" required>
+                            <span>Fear of criticism or rejection</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="sharing_block" value="2">
+                            <span>It's not good enough yet</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="sharing_block" value="3">
+                            <span>I'm just not ready</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="sharing_block" value="4">
+                            <span>Nothing really — I share when it's done</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="scenario">The deadline is tomorrow, and you've barely started.</div>
+                    <div class="question">How do you feel when a deadline is looming?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="deadline_emotion" value="1" required>
+                            <span>Shame — I should have done this sooner</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="deadline_emotion" value="2">
+                            <span>Panic — but somehow I get it done</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="deadline_emotion" value="3">
+                            <span>Focussed — pressure helps me work</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="deadline_emotion" value="4">
+                            <span>Calm — I've planned for this</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="scenario">Someone asks, "How's that project going?"</div>
+                    <div class="question">What do you feel when asked about delayed work?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="fear_type" value="1" required>
+                            <span>Fear of being exposed as incompetent</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="fear_type" value="2">
+                            <span>Embarrassment or guilt</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="fear_type" value="3">
+                            <span>Slightly defensive, but I explain</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="fear_type" value="4">
+                            <span>Fine — I can talk about where I'm at</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Perfectionism Questions -->
+            <div class="section">
+                <h2>✨ Standards & Perfectionism</h2>
+                <p class="section-intro">How high standards might be holding you back</p>
+                
+                <div class="question-group">
+                    <div class="scenario">You're working, and it's not going as well as you imagined.</div>
+                    <div class="question">What happens when your work isn't meeting your standards?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="imperfection" value="1" required>
+                            <span>I stop — if it's not going to be great, what's the point?</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="imperfection" value="2">
+                            <span>I get frustrated and take a break</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="imperfection" value="3">
+                            <span>I keep going, even if it's imperfect</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="imperfection" value="4">
+                            <span>I see it as part of the process</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="scenario">You've finished something, but before you share or submit it...</div>
+                    <div class="question">What do you do before submitting or sharing work?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="before_submit" value="1" required>
+                            <span>I edit endlessly and still feel it's not good enough</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="before_submit" value="2">
+                            <span>I check it multiple times, looking for mistakes</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="before_submit" value="3">
+                            <span>I review it once or twice, then let it go</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="before_submit" value="4">
+                            <span>I trust my process and share it</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="scenario">You receive criticism or feedback on your work.</div>
+                    <div class="question">How does criticism affect you?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="criticism" value="1" required>
+                            <span>It confirms my worst fears — I'm not good enough</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="criticism" value="2">
+                            <span>It stings, and I avoid working for a while</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="criticism" value="3">
+                            <span>It's hard to hear, but I can use it</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="criticism" value="4">
+                            <span>I separate feedback on my work from my worth as a person</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="scenario">Your inner voice speaks up while you're working.</div>
+                    <div class="question">What does your inner critic say?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="inner_voice" value="1" required>
+                            <span>"This has to be perfect or it's worthless"</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="inner_voice" value="2">
+                            <span>"You're not good enough to do this"</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="inner_voice" value="3">
+                            <span>"Who are you to do this?"</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="inner_voice" value="4">
+                            <span>"This is hard, but you're learning" (supportive)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Fatigue Questions -->
+            <div class="section">
+                <h2>🔋 Energy & Depletion</h2>
+                <p class="section-intro">How exhaustion might be affecting your ability to start</p>
+                
+                <div class="question-group">
+                    <div class="scenario">It's morning. You know what you need to do today.</div>
+                    <div class="question">How do you feel when you wake up?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="morning_energy" value="1" required>
+                            <span>Exhausted before I even begin</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="morning_energy" value="2">
+                            <span>Tired, but I can push through</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="morning_energy" value="3">
+                            <span>Okay — not energised, but functional</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="morning_energy" value="4">
+                            <span>Ready and energised</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="scenario">You've been working for a while, and your energy is fading.</div>
+                    <div class="question">What do you do when you need a break?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="breaks" value="1" required>
+                            <span>I fall into scrolling or distractions for hours</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="breaks" value="2">
+                            <span>I rest, but feel guilty about it</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="breaks" value="3">
+                            <span>I take intentional breaks and come back</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="breaks" value="4">
+                            <span>I pause before I'm depleted</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="scenario">It's the end of the week. You look back at what you accomplished.</div>
+                    <div class="question">How does your energy feel over a week?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="weekly_energy" value="1" required>
+                            <span>Constantly depleted — I'm running on empty</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="weekly_energy" value="2">
+                            <span>Drained by the end, but okay at the start</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="weekly_energy" value="3">
+                            <span>Up and down — some good days, some hard ones</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="weekly_energy" value="4">
+                            <span>Fairly consistent and sustainable</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="scenario">You're supposed to work on something, but you just can't.</div>
+                    <div class="question">When you can't bring yourself to start, how does it feel?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="cant_start" value="1" required>
+                            <span>Heavy — like I'm physically weighed down</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="cant_start" value="2">
+                            <span>Tired — I just don't have the energy</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="cant_start" value="3">
+                            <span>Restless — I want to, but something's blocking me</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="cant_start" value="4">
+                            <span>Curious — I pause to figure out what's in the way</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Disconnection Questions -->
+            <div class="section">
+                <h2>🌊 Meaning & Connection</h2>
+                <p class="section-intro">How disconnection might be affecting your motivation</p>
+                
+                <div class="question-group">
+                    <div class="scenario">You're scrolling social media and see someone else's success.</div>
+                    <div class="question">How does comparison affect your work?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="comparison" value="1" required>
+                            <span>They're better than me — what's the point?</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="comparison" value="2">
+                            <span>I feel small and doubt my work</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="comparison" value="3">
+                            <span>Inspired, but also a little envious</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="comparison" value="4">
+                            <span>Inspired — I focus on my own path</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="scenario">You're working on something that used to excite you, but now...</div>
+                    <div class="question">How connected do you feel to your work?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="connection_to_work" value="1" required>
+                            <span>Disconnected — it doesn't feel important anymore</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="connection_to_work" value="2">
+                            <span>Going through the motions</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="connection_to_work" value="3">
+                            <span>Some days I feel it, other days I don't</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="connection_to_work" value="4">
+                            <span>Connected — this still matters to me</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="scenario">You have multiple things you could work on.</div>
+                    <div class="question">How do you decide what to work on?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="decision_style" value="1" required>
+                            <span>I freeze — everything feels equally urgent or impossible</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="decision_style" value="2">
+                            <span>I avoid deciding by doing easier things instead</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="decision_style" value="3">
+                            <span>I pick based on urgency or external pressure</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="decision_style" value="4">
+                            <span>I choose what feels meaningful or energising</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="scenario">You finish something, but no one seems to notice or care.</div>
+                    <div class="question">How important is external validation to your motivation?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="validation" value="1" required>
+                            <span>Essential — if no one cares, why bother?</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="validation" value="2">
+                            <span>It matters a lot — silence is discouraging</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="validation" value="3">
+                            <span>Nice to have, but not essential</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="validation" value="4">
+                            <span>I create for myself, not for applause</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="question-group">
+                    <div class="scenario">You think about what you want to achieve long-term.</div>
+                    <div class="question">How clear are you on why this work matters?</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="clarity" value="1" required>
+                            <span>Unclear — I'm not sure why I'm doing this anymore</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="clarity" value="2">
+                            <span>Vague — I have reasons, but they feel distant</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="clarity" value="3">
+                            <span>Mostly clear — I know the general direction</span>
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="clarity" value="4">
+                            <span>Crystal clear — I know my "why"</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Learning Preferences -->
+            <div class="section">
+                <h2>🎓 How You Learn Best</h2>
+                <p class="section-intro">We'll match resources to how you prefer to learn</p>
+                
+                <div class="question-group">
+                    <div class="question">What helps you understand something new? (Select all that apply)</div>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="learning_pref" value="visual">
+                            <span>📹 <strong>Videos</strong> or visual demonstrations</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="learning_pref" value="reading">
+                            <span>📄 <strong>Articles</strong> or written guides</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="learning_pref" value="doing">
+                            <span>⚡ <strong>Trying it</strong> myself and learning by doing</span>
+                        </label>
+                        <label class="checkbox-item">
+                            <input type="checkbox" name="learning_pref" value="talking">
+                            <span>🗣️ <strong>Talking it through</strong> with someone</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Open Questions -->
+            <div class="section">
+                <h2>💬 Your Pattern</h2>
+                <p class="section-intro">These questions help us personalise your strategy</p>
+                
+                <div class="question-group">
+                    <div class="question">What's one thing you've been avoiding or delaying?</div>
+                    <textarea name="avoided_task" placeholder="It can be anything — big project, email, creative work, life admin..." rows="3"></textarea>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">When you think about why you delay, what feels most true?</div>
+                    <textarea name="procrastination_reason" placeholder="E.g., fear of failure, too tired, it doesn't feel important anymore, perfectionism..." rows="3"></textarea>
+                </div>
+
+                <div class="question-group">
+                    <div class="question">What would it feel like to move forward without the pressure or perfectionism?</div>
+                    <textarea name="desired_change" placeholder="E.g., lighter, more creative, less stuck, more connected to my work..." rows="3"></textarea>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn">See My Procrastination Profile</button>
+        </form>
+        
+        <div id="results">
+            <div class="profile-badge" id="profileBadge"></div>
+            
+            <div class="interpretation" id="interpretation"></div>
+            
+            <div class="cta-box">
+                <h4>📋 Your Personalised Strategy</h4>
+                <div id="actionPlan" style="margin-top: 20px;">
+                    <p style="text-align: center; color: #718096; font-style: italic;">
+                        Generating your personalised strategy...<br>
+                        <span style="font-size: 2em; margin: 20px 0; display: block;">⏳</span>
+                    </p>
+                </div>
+                
+                <div id="emailCapture" style="display: none; margin-top: 30px; padding-top: 30px; border-top: 3px solid #e2e8f0;">
+                    <h5 style="margin-bottom: 15px; text-align: center; color: #2d3748;">Want to save this strategy?</h5>
+                    <p style="text-align: center; color: #4a5568; margin-bottom: 20px;">We can email you a copy along with additional resources</p>
+                    
+                    <input type="email" id="participantEmail" class="cta-input" placeholder="Your email address (optional)">
+                    <input type="text" id="participantName" class="cta-input" placeholder="Your name (optional)">
+                    
+                    <button onclick="sendEmail()" class="cta-button">Email Me a Copy</button>
+                    
+                    <p style="text-align: center; margin-top: 15px; font-size: 0.9em; color: #718096;">
+                        Or just save this page (Ctrl+S / Cmd+S) to keep your results
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Visual feedback for selections
+        let assessmentData = null;
+        
+        document.addEventListener('change', (e) => {
+            if (e.target.type === 'radio') {
+                const name = e.target.name;
+                document.querySelectorAll(`input[name="${name}"]`).forEach(radio => {
+                    radio.closest('.radio-item').classList.remove('selected');
+                });
+                e.target.closest('.radio-item').classList.add('selected');
+            }
+            
+            if (e.target.type === 'checkbox' && e.target.name === 'learning_pref') {
+                if (e.target.checked) {
+                    e.target.closest('.checkbox-item').classList.add('selected');
+                } else {
+                    e.target.closest('.checkbox-item').classList.remove('selected');
+                }
+            }
+        });
+
+        // Profile data
+        const profiles = {
+            fear: {
+                icon: '🛡️',
+                name: 'The Protective Avoider',
+                tagline: 'Fear-based procrastination',
+                color: '#ef4444'
+            },
+            perfectionism: {
+                icon: '✨',
+                name: 'The Standards Holder',
+                tagline: 'Perfectionism-driven delay',
+                color: '#f59e0b'
+            },
+            fatigue: {
+                icon: '🔋',
+                name: 'The Depleted One',
+                tagline: 'Exhaustion-based avoidance',
+                color: '#10B981'
+            },
+            disconnection: {
+                icon: '🌊',
+                name: 'The Unmoored',
+                tagline: 'Meaning-disconnection pattern',
+                color: '#3b82f6'
+            }
+        };
+
+        // Form submission
+        document.getElementById('procrastinationAssessment').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Calculate pattern scores
+            let fearScore = 0, perfectionismScore = 0, fatigueScore = 0, disconnectionScore = 0;
+            
+            // Fear questions
+            const fearQuestions = ['blank_page', 'sharing_block', 'deadline_emotion', 'fear_type'];
+            fearQuestions.forEach(q => {
+                const val = document.querySelector(`input[name="${q}"]:checked`)?.value;
+                if(val) fearScore += (5 - parseInt(val));
+            });
+            
+            // Perfectionism questions
+            const perfQuestions = ['imperfection', 'before_submit', 'criticism', 'inner_voice'];
+            perfQuestions.forEach(q => {
+                const val = document.querySelector(`input[name="${q}"]:checked`)?.value;
+                if(val) perfectionismScore += (5 - parseInt(val));
+            });
+            
+            // Fatigue questions
+            const fatigueQuestions = ['morning_energy', 'breaks', 'weekly_energy', 'cant_start'];
+            fatigueQuestions.forEach(q => {
+                const val = document.querySelector(`input[name="${q}"]:checked`)?.value;
+                if(val) fatigueScore += (5 - parseInt(val));
+            });
+            
+            // Disconnection questions
+            const disconnectQuestions = ['comparison', 'connection_to_work', 'decision_style', 'validation', 'clarity'];
+            disconnectQuestions.forEach(q => {
+                const val = document.querySelector(`input[name="${q}"]:checked`)?.value;
+                if(val) disconnectionScore += (5 - parseInt(val));
+            });
+            
+            // Normalize scores
+            const fearAvg = fearScore / fearQuestions.length;
+            const perfAvg = perfectionismScore / perfQuestions.length;
+            const fatigueAvg = fatigueScore / fatigueQuestions.length;
+            const disconnectAvg = disconnectionScore / disconnectQuestions.length;
+            
+            // Determine primary pattern
+            const scores = {
+                fear: fearAvg,
+                perfectionism: perfAvg,
+                fatigue: fatigueAvg,
+                disconnection: disconnectAvg
+            };
+            
+            const primaryPattern = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+            const secondaryPattern = Object.keys(scores).sort((a, b) => scores[b] - scores[a])[1];
+            
+            // Get learning preferences
+            const learningPrefs = [];
+            document.querySelectorAll('input[name="learning_pref"]:checked').forEach(cb => {
+                learningPrefs.push(cb.value);
+            });
+            
+            // Get open responses
+            const avoidedTask = document.querySelector('textarea[name="avoided_task"]').value;
+            const procrastinationReason = document.querySelector('textarea[name="procrastination_reason"]').value;
+            const desiredChange = document.querySelector('textarea[name="desired_change"]').value;
+            
+            // Store assessment data
+            assessmentData = {
+                assessment_uid: 'assessment_procrastination_profiler',
+                timestamp: new Date().toISOString(),
+                scores: {
+                    fear_score: fearAvg.toFixed(2),
+                    perfectionism_score: perfAvg.toFixed(2),
+                    fatigue_score: fatigueAvg.toFixed(2),
+                    disconnection_score: disconnectAvg.toFixed(2),
+                    primary_pattern: primaryPattern,
+                    secondary_pattern: secondaryPattern
+                },
+                learning_preferences: {
+                    primary_style: learningPrefs[0] || 'visual',
+                    all_styles: learningPrefs
+                },
+                open_responses: {
+                    avoided_task: avoidedTask,
+                    procrastination_reason: procrastinationReason,
+                    desired_change: desiredChange
+                },
+                profile_level: primaryPattern
+            };
+            
+            // Display results
+            displayResults(primaryPattern, secondaryPattern, scores);
+            
+            // Generate action plan
+            generateActionPlan();
+        });
+
+        function displayResults(primary, secondary, scores) {
+            // Update profile badge
+            const profile = profiles[primary];
+            document.getElementById('profileBadge').innerHTML = `
+                <div class="profile-icon">${profile.icon}</div>
+                <div class="profile-name" style="color: ${profile.color}">${profile.name}</div>
+                <div class="profile-tagline">${profile.tagline}</div>
+            `;
+            
+            // Generate interpretation
+            let interpretation = '';
+            
+            if(primary === 'fear') {
+                interpretation = `
+                    <h3 style="color: #ef4444;">Understanding Your Pattern</h3>
+                    <p>Your procrastination is rooted in <strong>fear</strong> — fear of failure, criticism, or being exposed as "not good enough." When you delay, you're not being lazy — you're protecting yourself from what feels like emotional danger.</p>
+                    
+                    <h4>What's Really Happening</h4>
+                    <ul>
+                        <li>The blank page/canvas feels overwhelming because it represents risk</li>
+                        <li>You avoid sharing work because criticism feels like proof of inadequacy</li>
+                        <li>Deadlines create shame spirals ("I should have done this sooner")</li>
+                        <li>Your inner voice says: "Who are you to do this?"</li>
+                    </ul>
+                    
+                    <h4>This Isn't About Discipline</h4>
+                    <p>No amount of productivity tips will help if the underlying fear isn't addressed. You need practices that build <strong>psychological safety</strong> — places where it's safe to be imperfect, to fail, to be seen.</p>
+                `;
+            } else if(primary === 'perfectionism') {
+                interpretation = `
+                    <h3 style="color: #f59e0b;">Understanding Your Pattern</h3>
+                    <p>Your procrastination is driven by <strong>impossibly high standards</strong>. You delay because if it's not going to be great, you'd rather not start. You edit endlessly, never quite feeling it's "good enough."</p>
+                    
+                    <h4>What's Really Happening</h4>
+                    <ul>
+                        <li>You stop when work isn't meeting your standards ("What's the point?")</li>
+                        <li>You edit endlessly before sharing, never feeling it's ready</li>
+                        <li>Criticism confirms your fear: "It's not good enough"</li>
+                        <li>Your inner voice says: "This has to be perfect or it's worthless"</li>
+                    </ul>
+                    
+                    <h4>This Isn't About Laziness</h4>
+                    <p>You're not avoiding work — you're avoiding <strong>imperfection</strong>. The problem isn't that you lack skill or motivation. It's that your standards are so high, nothing feels worthy of being created.</p>
+                `;
+            } else if(primary === 'fatigue') {
+                interpretation = `
+                    <h3 style="color: #10B981;">Understanding Your Pattern</h3>
+                    <p>Your procrastination is rooted in <strong>depletion</strong>. You're not avoiding work because you're lazy — you're avoiding it because you're running on empty. Starting feels impossible when you're already exhausted.</p>
+                    
+                    <h4>What's Really Happening</h4>
+                    <ul>
+                        <li>You wake up exhausted before you even begin</li>
+                        <li>Breaks turn into hours of scrolling (because you're too tired to choose)</li>
+                        <li>Your energy is constantly depleted — you're running on fumes</li>
+                        <li>You can't start because you feel physically weighed down</li>
+                    </ul>
+                    
+                    <h4>This Isn't About Motivation</h4>
+                    <p>No productivity system will work if you don't have the energy to execute it. You need <strong>rest first</strong>, then strategy. Trying to "push through" only deepens the exhaustion.</p>
+                `;
+            } else if(primary === 'disconnection') {
+                interpretation = `
+                    <h3 style="color: #3b82f6;">Understanding Your Pattern</h3>
+                    <p>Your procrastination is rooted in <strong>disconnection from meaning</strong>. You're not avoiding work because you're lazy — you're avoiding it because it doesn't feel important anymore. When work feels pointless, why start?</p>
+                    
+                    <h4>What's Really Happening</h4>
+                    <ul>
+                        <li>Comparison makes your work feel small ("They're better — what's the point?")</li>
+                        <li>You're going through the motions, disconnected from why it mattered</li>
+                        <li>You freeze when choosing what to work on (everything feels equally impossible)</li>
+                        <li>External validation is essential — without it, why bother?</li>
+                    </ul>
+                    
+                    <h4>This Isn't About Discipline</h4>
+                    <p>No amount of productivity hacks will help if you don't care about the work. You need to <strong>reconnect to why this matters</strong> — or give yourself permission to let it go.</p>
+                `;
+            }
+            
+            // Add secondary pattern note if significant
+            if(scores[secondary] > 2.5) {
+                const secondaryProfile = profiles[secondary];
+                interpretation += `
+                    <h4 style="margin-top: 30px;">Secondary Pattern: ${secondaryProfile.name}</h4>
+                    <p style="font-style: italic;">You also show elements of ${secondary}-based procrastination. Your personalised strategy will address both patterns.</p>
+                `;
+            }
+            
+            document.getElementById('interpretation').innerHTML = interpretation;
+            
+            // Show results
+            document.getElementById('results').style.display = 'block';
+            
+            // Scroll to results - iOS friendly
+            setTimeout(() => {
+                const resultsElement = document.getElementById('results');
+                const offset = resultsElement.offsetTop - 20;
+                window.scrollTo(0, offset);
+            }, 100);
+        }
+
+        function generateActionPlan() {
+            const actionPlanDiv = document.getElementById('actionPlan');
+            
+            setTimeout(() => {
+                const plan = createActionPlan(assessmentData);
+                actionPlanDiv.innerHTML = plan;
+                document.getElementById('emailCapture').style.display = 'block';
+            }, 2000);
+        }
+
+        function createActionPlan(data) {
+            const { profile_level, open_responses, learning_preferences } = data;
+            
+            let plan = `<div style="text-align: left;">`;
+            
+            // Pattern-specific strategies
+            if (profile_level === 'fear') {
+                plan += `
+                    <h4 style="color: #8B5CF6; margin-bottom: 15px;">🎯 What Actually Helps</h4>
+                    
+                    <div style="background: #fef3c7; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #f59e0b;">
+                        <h5 style="margin-bottom: 10px; color: #2d3748;">✨ Try This Now (10 minutes)</h5>
+                        <p style="margin-bottom: 10px;"><strong>Activity:</strong> Write the worst possible version of what you're avoiding. Give yourself 5 minutes to create something intentionally terrible.</p>
+                        <p style="margin-bottom: 0;"><strong>Why it works:</strong> You can't fail at making something bad. This practice separates "starting" from "being good."</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h5 style="color: #2d3748; margin-bottom: 10px;">📚 Next Steps:</h5>
+                        <ul style="margin-left: 20px; line-height: 1.8;">
+                            <li><strong>Lower the stakes:</strong> Practice in private before sharing publicly. Create a "safe to fail" space.</li>
+                            <li><strong>Version 0.1 approach:</strong> Give yourself permission for terrible first drafts. Progress, not perfection.</li>
+                            <li><strong>Reframe failure:</strong> "This didn't work" instead of "I'm not good enough."</li>
+                            <li><strong>Start invisible:</strong> Work where no one can see you until you're ready to share.</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (profile_level === 'perfectionism') {
+                plan += `
+                    <h4 style="color: #8B5CF6; margin-bottom: 15px;">🎯 What Actually Helps</h4>
+                    
+                    <div style="background: #fef3c7; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #f59e0b;">
+                        <h5 style="margin-bottom: 10px; color: #2d3748;">✨ Try This Now (15 minutes)</h5>
+                        <p style="margin-bottom: 10px;"><strong>Activity:</strong> Set a timer for 15 minutes. Work on what you're avoiding. When the timer ends, stop immediately — even mid-sentence.</p>
+                        <p style="margin-bottom: 0;"><strong>Why it works:</strong> Time limits prevent endless editing. You practice creating without perfecting.</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h5 style="color: #2d3748; margin-bottom: 10px;">📚 Next Steps:</h5>
+                        <ul style="margin-left: 20px; line-height: 1.8;">
+                            <li><strong>Separate creation from editing:</strong> Make first, judge later. Never do both at the same time.</li>
+                            <li><strong>Time-box everything:</strong> "I'll work on this for 30 minutes, then stop" prevents perfectionism spirals.</li>
+                            <li><strong>Practice "good enough":</strong> Ship before it's perfect. Learn what actually matters.</li>
+                            <li><strong>Version 0.1 mindset:</strong> First drafts are supposed to be bad. That's their job.</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (profile_level === 'fatigue') {
+                plan += `
+                    <h4 style="color: #8B5CF6; margin-bottom: 15px;">🎯 What Actually Helps</h4>
+                    
+                    <div style="background: #fef3c7; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #f59e0b;">
+                        <h5 style="margin-bottom: 10px; color: #2d3748;">✨ Try This Now (5 minutes)</h5>
+                        <p style="margin-bottom: 10px;"><strong>Activity:</strong> Set a timer for 5 minutes. Do the absolute smallest step of what you're avoiding. Then stop, even if you want to continue.</p>
+                        <p style="margin-bottom: 0;"><strong>Why it works:</strong> You're proving to yourself you can start without depleting yourself. Small wins build energy.</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h5 style="color: #2d3748; margin-bottom: 10px;">📚 Next Steps:</h5>
+                        <ul style="margin-left: 20px; line-height: 1.8;">
+                            <li><strong>Rest without guilt:</strong> You can't create from depletion. Rest is productive.</li>
+                            <li><strong>Smallest possible step:</strong> Break tasks into 5-minute chunks. Anything bigger is too much.</li>
+                            <li><strong>Energy before productivity:</strong> Protect your energy like a finite resource.</li>
+                            <li><strong>Remove obligations:</strong> Say no to things that drain you. Your capacity is real.</li>
+                        </ul>
+                    </div>
+                `;
+            } else if (profile_level === 'disconnection') {
+                plan += `
+                    <h4 style="color: #8B5CF6; margin-bottom: 15px;">🎯 What Actually Helps</h4>
+                    
+                    <div style="background: #fef3c7; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #f59e0b;">
+                        <h5 style="margin-bottom: 10px; color: #2d3748;">✨ Try This Now (10 minutes)</h5>
+                        <p style="margin-bottom: 10px;"><strong>Activity:</strong> Write down: "Why did this matter to me in the first place?" Answer honestly, even if the answer is "I don't know anymore."</p>
+                        <p style="margin-bottom: 0;"><strong>Why it works:</strong> You can't reconnect if you don't know what broke. Honesty is the first step.</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h5 style="color: #2d3748; margin-bottom: 10px;">📚 Next Steps:</h5>
+                        <ul style="margin-left: 20px; line-height: 1.8;">
+                            <li><strong>Permission to quit:</strong> If it doesn't matter anymore, stop doing it. Seriously.</li>
+                            <li><strong>Reconnect to your "why":</strong> What did you hope this would feel like? What's changed?</li>
+                            <li><strong>Make it personal again:</strong> Add something that matters to you, not what others expect.</li>
+                            <li><strong>Create for yourself first:</strong> Internal validation before external applause.</li>
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            // Add learning style note
+            const primaryStyle = learning_preferences.primary_style || 'visual';
+            let styleNote = '';
+            if (primaryStyle === 'visual') {
+                styleNote = 'Look for videos and visual guides when exploring procrastination patterns';
+            } else if (primaryStyle === 'reading') {
+                styleNote = 'Articles and written reflections work best for understanding your pattern';
+            } else if (primaryStyle === 'doing') {
+                styleNote = 'You learn by experimenting—try different approaches and see what works';
+            } else {
+                styleNote = 'Talking through your pattern with someone will help you see it more clearly';
+            }
+            
+            plan += `
+                <div style="background: #faf5ff; padding: 15px; border-radius: 8px; border-left: 4px solid #8B5CF6;">
+                    <p style="margin: 0;"><strong>💡 Learning tip:</strong> ${styleNote}</p>
+                </div>
+            </div>`;
+            
+            return plan;
+        }
+
+        async function sendEmail() {
+            const email = document.getElementById('participantEmail').value;
+            const name = document.getElementById('participantName').value || 'Friend';
+            
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address');
+                return;
+            }
+            
+            assessmentData.participant = { name, email };
+            
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Sending...';
+            button.disabled = true;
+            
+            try {
+                const response = await fetch('/api/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(assessmentData)
+                });
+                
+                if(response.ok) {
+                    document.getElementById('emailCapture').innerHTML = `
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="font-size: 3em; margin-bottom: 10px;">✅</div>
+                            <p style="color: #8B5CF6; font-weight: 600;">Email sent to ${email}</p>
+                            <p style="color: #718096; font-size: 0.95em; margin-top: 10px;">Check your inbox in a few minutes</p>
+                        </div>
+                    `;
+                } else {
+                    throw new Error('Failed');
+                }
+            } catch(error) {
+                alert('Could not send email. Please save this page instead, or email hello@cogskills.co.uk');
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

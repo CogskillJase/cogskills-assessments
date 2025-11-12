@@ -1,6 +1,40 @@
 {
-  "rewrites": [
-    { "source": "/flow", "destination": "/flow-assessment.html" },
-    { "source": "/procrastination", "destination": "/procrastination-assessment.html" }
-  ]
+  "cleanUrls": true,
+  "trailingSlash": false
 }
+```
+
+### **5. Scroll down, commit message:** `Fix routing config`
+
+### **6. Click "Commit changes"**
+
+---
+
+## 🤔 **WAIT, WHAT DOES THIS DO?**
+
+This tells Vercel to automatically serve HTML files without the `.html` extension.
+
+So:
+- `/flow-assessment.html` becomes accessible at `/flow-assessment`
+- `/procrastination-assessment.html` becomes accessible at `/procrastination-assessment`
+
+---
+
+## ⏱️ **WAIT 2 MINUTES**
+
+Vercel will automatically redeploy. Then try:
+```
+https://cogskills-assessments.vercel.app/flow-assessment
+https://cogskills-assessments.vercel.app/procrastination-assessment
+```
+
+---
+
+## 🎯 **ALTERNATIVE (If that doesn't work):**
+
+If the above doesn't work, we can just update your URLs to include the full filename. It's not as clean, but it works:
+
+**Your assessment URLs would be:**
+```
+https://cogskills-assessments.vercel.app/flow-assessment.html
+https://cogskills-assessments.vercel.app/procrastination-assessment.html

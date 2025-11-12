@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/flow", "destination": "/flow-assessment.html" },
+    { "source": "/procrastination", "destination": "/procrastination-assessment.html" }
+  ]
+}
